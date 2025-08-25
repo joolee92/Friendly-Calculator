@@ -1,20 +1,76 @@
-const add = (a, b) => {return a + b};
-const subtract = (a, b) => {return a - b};
-const multiply = (a, b) => {return a * b};
-const divide = (a, b) => {return a / b};
+const add = (a, b) => {
+  return a + b;
+};
+const subtract = (a, b) => {
+  return a - b;
+};
+const multiply = (a, b) => {
+  return a * b;
+};
+const divide = (a, b) => {
+  return a / b;
+};
 
-let firstNum, op, secondNum;
+let variables = { firstNum: undefined, secondNum: undefined, op: undefined };
+//let firstNum, op, secondNum;
 
-function operate(op, firstNum, secondNum) {
-    return op(firstNum, secondNum);
+function compute(variables) {
+    let first = Number(variables.firstNum);
+    let second = Number(variables.secondNum);
+    if (variables.op === "+") return add(first, second);
+    if (variables.op === "-") return subtract(first, second);
+    if (variables.op === "*") return multiply(first, second);
+    if (variables.op === "/") return divide(first, second);
 }
 
+const display = document.querySelector(".display");
+display.textContent = 0;
 
+document.querySelectorAll(".num").forEach((num) => {
+  num.addEventListener("click", pushNum);
+});
 
+function pushNum(e) {
+  if (variables.op !== undefined && display.textContent === variables.firstNum.toString()) {
+    display.textContent = e.target.innerText;
+  } else {
+    if (display.textContent === "0") display.textContent = e.target.innerText;
+    else display.textContent += e.target.innerText;
+  }
+}
 
+document.querySelector(".dec").addEventListener("click", function (e) {
+  if (!display.textContent.includes(".")) {
+    display.textContent += e.target.innerText;
+  }
+});
 
+document.querySelectorAll(".operator").forEach((operator) => {
+  operator.addEventListener("click", () => {
+    if (operator.textContent === "AC") {
+      display.textContent = "0";
+      Object.keys(variables).forEach((key) => {
+        variables[key] = undefined;
+      });
+    }
+    if (operator.textContent === "=") {
+        if (variables.firstNum !== undefined && variables.op !== undefined) {
+            variables.secondNum = display.textContent;
+            display.textContent = variables.firstNum = compute(variables);
 
-
+        }
+    }
+    if (operator.textContent !== "=" && operator.textContent !== "AC") {
+      variables.op = operator.textContent;
+      if (variables.firstNum === undefined) {
+        variables.firstNum = display.textContent;
+      }
+    }
+    console.log(variables.firstNum);
+    console.log(variables.op);
+    console.log(variables.secondNum);
+  });
+});
 
 /*
 
