@@ -11,16 +11,17 @@ const divide = (a, b) => {
   return a / b;
 };
 
-let variables = { firstNum: undefined, secondNum: undefined, op: undefined };
-//let firstNum, op, secondNum;
+let variables = { firstNum: "", secondNum: "", op: undefined };
+let partTwo = false;
+let computed;
 
 function compute(variables) {
-    let first = Number(variables.firstNum);
-    let second = Number(variables.secondNum);
-    if (variables.op === "+") return add(first, second);
-    if (variables.op === "-") return subtract(first, second);
-    if (variables.op === "*") return multiply(first, second);
-    if (variables.op === "/") return divide(first, second);
+  let first = Number(variables.firstNum);
+  let second = Number(variables.secondNum);
+  if (variables.op === "+") return add(first, second);
+  if (variables.op === "-") return subtract(first, second);
+  if (variables.op === "*") return multiply(first, second);
+  if (variables.op === "/") return divide(first, second);
 }
 
 const display = document.querySelector(".display");
@@ -29,49 +30,109 @@ display.textContent = 0;
 document.querySelectorAll(".num").forEach((num) => {
   num.addEventListener("click", pushNum);
 });
-
-function pushNum(e) {
-  if (variables.op !== undefined && display.textContent === variables.firstNum.toString()) {
-    display.textContent = e.target.innerText;
-  } else {
-    if (display.textContent === "0") display.textContent = e.target.innerText;
-    else display.textContent += e.target.innerText;
-  }
-}
-
 document.querySelector(".dec").addEventListener("click", function (e) {
   if (!display.textContent.includes(".")) {
     display.textContent += e.target.innerText;
   }
 });
+document.querySelector(".clear").addEventListener("click", () => {
+  clear(variables);
+});
 
-document.querySelectorAll(".operator").forEach((operator) => {
-  operator.addEventListener("click", () => {
-    if (operator.textContent === "AC") {
-      display.textContent = "0";
-      Object.keys(variables).forEach((key) => {
-        variables[key] = undefined;
-      });
-    }
-    if (operator.textContent === "=") {
-        if (variables.firstNum !== undefined && variables.op !== undefined) {
-            variables.secondNum = display.textContent;
-            display.textContent = variables.firstNum = compute(variables);
+document.querySelector(".equals").addEventListener("click", () => {
+  if (variables.secondNum !== "") {
+    computed = compute(variables);
+    display.textContent = computed;
+    variables.firstNum = computed;
+    variables.secondNum = "";
+    variables.op = undefined;
+  }
+});
 
-        }
+function pushNum(e) {
+  if (variables.op === undefined) {
+    if (computed !== undefined) {
+      variables.firstNum = e.target.textContent;
+      computed = undefined;
+      display.textContent = `${variables.firstNum}`;
+    } else {
+      variables.firstNum += e.target.textContent;
+      display.textContent = variables.firstNum;
     }
-    if (operator.textContent !== "=" && operator.textContent !== "AC") {
-      variables.op = operator.textContent;
-      if (variables.firstNum === undefined) {
-        variables.firstNum = display.textContent;
-      }
+  } else {
+    variables.secondNum += e.target.textContent;
+    display.textContent = `${variables.firstNum} ${variables.op} ${variables.secondNum}`;
+  }
+
+  console.log(
+    `Num btn -> ${variables.firstNum} ${variables.op} ${variables.secondNum}`
+  );
+  console.log(
+    `e.target: ${e.target.textContent} -> display: ${display.textContent}`);
+  console.log("--------------------------------------");
+}
+
+document.querySelectorAll(".operator").forEach((oper) => {
+  oper.addEventListener("click", () => {
+    if (variables.secondNum !== "") {
+      computed = compute(variables);
+      display.textContent = computed;
+      variables.firstNum = computed;
+      variables.secondNum = "";
     }
-    console.log(variables.firstNum);
-    console.log(variables.op);
-    console.log(variables.secondNum);
+    variables.op = oper.textContent;
+    display.textContent = `${variables.firstNum} ${variables.op}`;
+
+    console.log(`Operator btn -> ${variables.firstNum} ${variables.op} ${variables.secondNum}`);
+    console.log(`display: ${display.textContent}`);
+    console.log("--------------------------------------");
   });
 });
 
+function clear(variables) {
+  display.textContent = "0";
+  variables.firstNum = variables.secondNum = "";
+  variables.op = undefined;
+}
+/*
+document.querySelectorAll(".operator").forEach((operator) => {
+  operator.addEventListener("click", () => {
+    if (operator.textContent !== "=" && operator.textContent !== "AC") {
+        if (variables.firstNum === undefined) {
+            variables.op = operator.textContent;
+            variables.firstNum = display.textContent;
+            display.textContent = `${variables.firstNum} ${operator.textContent} `;
+        } else {
+
+                if (display.textContent === `${variables.firstNum} ${variables.op} `) {
+                    variables.op = operator.textContent;
+                    display.textContent = `${variables.firstNum} ${variables.op} `;
+                } else {
+                    variables.secondNum = display.textContent.slice(display.textContent.indexOf(variables.op)+2, display.textContent.length);
+                    computedVariables = compute(variables);
+                    display.textContent = variables.firstNum = computedVariables;
+                    variables.secondNum = undefined;
+                    variables.op = operator.textContent;
+                    display.textContent = `${variables.firstNum} ${operator.textContent} `;
+                }
+
+        }
+    }
+    if (operator.textContent === "AC") {
+        clear(variables);
+    }
+    if (operator.textContent === "=" && variables.firstNum !== undefined && variables.op !== undefined && display.textContent !== `${variables.firstNum} ${variables.op} `) {
+        variables.secondNum = display.textContent.slice(display.textContent.indexOf(variables.op)+2, display.textContent.length);
+        computedVariables = compute(variables);
+        display.textContent = variables.firstNum = computedVariables;
+        variables.secondNum = undefined;
+    }
+    console.log(`Operator btn -> ${variables.firstNum} ${variables.op} ${variables.secondNum}`);
+    console.log(`display: ${display.textContent}`);
+    console.log('--------------------------------------');
+  });
+});
+*/
 /*
 
 const display = document.getElementById("display");
