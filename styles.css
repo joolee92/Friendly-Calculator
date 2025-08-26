@@ -102,20 +102,3 @@ nav {
   margin-bottom: 20px;
 }
 
-.backspace {
-  position: absolute;
-  right: 0;
-  top: -35px;
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.2s;
-}
-
-.backspace:hover {
-  background-color: #cc0000;
-}

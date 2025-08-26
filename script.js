@@ -12,7 +12,6 @@ const divide = (a, b) => {
 };
 
 let variables = { firstNum: "", secondNum: "", op: undefined };
-let partTwo = false;
 let computed;
 
 function compute(variables) {
@@ -32,7 +31,7 @@ document.querySelectorAll(".num").forEach((num) => {
 });
 document.querySelector(".dec").addEventListener("click", function (e) {
   if (!display.textContent.includes(".")) {
-    display.textContent += e.target.innerText;
+    display.textContent += e.target.textContent;
   }
 });
 document.querySelector(".clear").addEventListener("click", () => {
@@ -94,89 +93,3 @@ function clear(variables) {
   variables.firstNum = variables.secondNum = "";
   variables.op = undefined;
 }
-/*
-document.querySelectorAll(".operator").forEach((operator) => {
-  operator.addEventListener("click", () => {
-    if (operator.textContent !== "=" && operator.textContent !== "AC") {
-        if (variables.firstNum === undefined) {
-            variables.op = operator.textContent;
-            variables.firstNum = display.textContent;
-            display.textContent = `${variables.firstNum} ${operator.textContent} `;
-        } else {
-
-                if (display.textContent === `${variables.firstNum} ${variables.op} `) {
-                    variables.op = operator.textContent;
-                    display.textContent = `${variables.firstNum} ${variables.op} `;
-                } else {
-                    variables.secondNum = display.textContent.slice(display.textContent.indexOf(variables.op)+2, display.textContent.length);
-                    computedVariables = compute(variables);
-                    display.textContent = variables.firstNum = computedVariables;
-                    variables.secondNum = undefined;
-                    variables.op = operator.textContent;
-                    display.textContent = `${variables.firstNum} ${operator.textContent} `;
-                }
-
-        }
-    }
-    if (operator.textContent === "AC") {
-        clear(variables);
-    }
-    if (operator.textContent === "=" && variables.firstNum !== undefined && variables.op !== undefined && display.textContent !== `${variables.firstNum} ${variables.op} `) {
-        variables.secondNum = display.textContent.slice(display.textContent.indexOf(variables.op)+2, display.textContent.length);
-        computedVariables = compute(variables);
-        display.textContent = variables.firstNum = computedVariables;
-        variables.secondNum = undefined;
-    }
-    console.log(`Operator btn -> ${variables.firstNum} ${variables.op} ${variables.secondNum}`);
-    console.log(`display: ${display.textContent}`);
-    console.log('--------------------------------------');
-  });
-});
-*/
-/*
-
-const display = document.getElementById("display");
-const backspace = document.getElementById("backspace");
-const buttons = document.querySelectorAll(".buttons button");
-
-// Show or hide backspace based on display
-function updateBackspace() {
-  if (display.textContent !== "0") {
-    backspace.classList.add("show");
-  } else {
-    backspace.classList.remove("show");
-  }
-}
-
-// Handle calculator button clicks
-buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const value = button.textContent;
-
-    if (value === "=") {
-      try {
-        display.textContent = eval(display.textContent) || "0";
-      } catch {
-        display.textContent = "0";
-      }
-    } else {
-      if (display.textContent === "0") {
-        display.textContent = value === "." ? "0." : value;
-      } else {
-        display.textContent += value;
-      }
-    }
-
-    updateBackspace();
-  });
-});
-
-// Backspace functionality
-backspace.addEventListener("click", () => {
-  if (display.textContent.length > 1) {
-    display.textContent = display.textContent.slice(0, -1);
-  } else {
-    display.textContent = "0";
-  }
-  updateBackspace();
-});*/
